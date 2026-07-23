@@ -1,13 +1,12 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, useMemo } from "react"
 import Link from "next/link"
-import Image from "next/image"
 import { ChevronLeft, ChevronRight, ArrowUpRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-import { galleries, getSlideImages } from "@/lib/galleries"
+import { galleries, getSlideImages, getGalleryImages } from "@/lib/galleries"
 
 function BrushDivider() {
   return (
@@ -65,22 +64,24 @@ function HeroSlider() {
   }, [next])
 
   return (
-    <section className="relative h-screen w-full overflow-hidden">
-      {slides.map((src, i) => (
-        <div
-          key={src}
-          className={cn(
-            "absolute inset-0 transition-opacity duration-700 ease-in-out",
-            i === current ? "opacity-100" : "opacity-0 pointer-events-none",
-          )}
-        >
-          <img
-            src={src}
-            alt={`Obra ${i + 1}`}
-            className="w-full h-full object-cover"
-          />
-        </div>
-      ))}
+    <section className="relative w-full bg-charcoal" style={{ height: "85vh" }}>
+      <div className="absolute inset-0 flex items-center justify-center">
+        {slides.map((src, i) => (
+          <div
+            key={src}
+            className={cn(
+              "absolute inset-0 flex items-center justify-center transition-opacity duration-700 ease-in-out",
+              i === current ? "opacity-100" : "opacity-0 pointer-events-none",
+            )}
+          >
+            <img
+              src={src}
+              alt={`Obra ${i + 1}`}
+              className="max-w-full max-h-full object-contain"
+            />
+          </div>
+        ))}
+      </div>
 
       <button
         onClick={prev}
@@ -104,13 +105,71 @@ function HeroSlider() {
             onClick={() => goTo(i)}
             className={cn(
               "h-1 rounded-full transition-all duration-500",
-              i === current ? "w-8 bg-charcoal" : "w-2 bg-charcoal/30",
+              i === current ? "w-8 bg-white" : "w-2 bg-white/30",
             )}
             aria-label={`Slide ${i + 1}`}
           />
         ))}
       </div>
     </section>
+  )
+}
+
+function GalleryCard({ gallery, index }: { gallery: typeof galleries[number]; index: number }) {
+  const images = useMemo(() => getGalleryImages(gallery.slug), [gallery.slug])
+  const [currentIdx, setCurrentIdx] = useState(0)
+  const [orientation, setOrientation] = useState<"landscape" | "portrait">("landscape")
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentIdx((prev) => {
+        const nextIdx = (prev + 1) % images.length
+        return nextIdx
+      })
+    }, 3000 + index * 500)
+    return () => clearInterval(timer)
+  }, [images.length, index])
+
+  const handleLoad = useCallback((e: React.SyntheticEvent<HTMLImageElement>) => {
+    const img = e.currentTarget
+    if (img.naturalWidth >= img.naturalHeight) {
+      setOrientation("landscape")
+    } else {
+      setOrientation("portrait")
+    }
+  }, [])
+
+  const src = images[currentIdx] || gallery.cover
+
+  return (
+    <Link
+      href={`/galeria/${gallery.slug}`}
+      className={cn(
+        "group cursor-pointer block",
+        orientation === "portrait" ? "row-span-2" : "row-span-1",
+      )}
+    >
+      <div
+        className={cn(
+          "overflow-hidden mb-4 rounded-sm transition-all duration-500",
+          orientation === "portrait" ? "aspect-[3/4]" : "aspect-[16/9]",
+        )}
+      >
+        <img
+          key={src}
+          src={src}
+          alt={gallery.title}
+          onLoad={handleLoad}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+        />
+      </div>
+      <h3 className="font-serif text-lg group-hover:text-turquoise transition-colors duration-300">
+        {gallery.title}
+      </h3>
+      <p className="text-sm text-gray mt-1">
+        {gallery.imageCount} obras
+      </p>
+    </Link>
   )
 }
 
@@ -122,27 +181,15 @@ function GalleryGrid() {
           Obra
         </h2>
         <div className="mt-6 mb-16" />
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-          {galleries.map((gallery) => (
-            <Link
-              key={gallery.slug}
-              href={`/galeria/${gallery.slug}`}
-              className="group cursor-pointer"
-            >
-              <div className="aspect-[16/9] overflow-hidden mb-4 rounded-sm">
-                <img
-                  src={gallery.cover}
-                  alt={gallery.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
-              </div>
-              <h3 className="font-serif text-lg group-hover:text-turquoise transition-colors duration-300">
-                {gallery.title}
-              </h3>
-              <p className="text-sm text-gray mt-1">
-                {gallery.imageCount} obras
-              </p>
-            </Link>
+        <div
+          className="grid gap-10"
+          style={{
+            gridTemplateColumns: "repeat(3, 1fr)",
+            gridAutoRows: "minmax(0, auto)",
+          }}
+        >
+          {galleries.map((gallery, i) => (
+            <GalleryCard key={gallery.slug} gallery={gallery} index={i} />
           ))}
         </div>
       </div>
