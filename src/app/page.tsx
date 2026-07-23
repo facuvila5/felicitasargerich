@@ -154,7 +154,13 @@ function SobreMi() {
   return (
     <section id="sobre-mi" className="py-32 px-6 lg:px-12 bg-warm">
       <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-20 items-center">
-        <div className="aspect-[3/4] bg-charcoal/5 rounded-sm" />
+        <div className="aspect-[3/4] rounded-sm overflow-hidden">
+          <img
+            src="/retrato.jpg"
+            alt="Felicitas Argerich"
+            className="w-full h-full object-cover"
+          />
+        </div>
         <div>
           <h2 className="font-serif text-3xl mb-2 brush-stroke inline-block">
             Sobre mí

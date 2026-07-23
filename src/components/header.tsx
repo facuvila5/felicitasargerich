@@ -25,13 +25,17 @@ export function Header() {
     <>
       <header
         className={cn(
-          "fixed top-0 left-0 right-0 z-50 transition-all duration-500",
-          scrolled ? "bg-cream/95 backdrop-blur-md shadow-sm" : "bg-transparent",
+          "fixed top-0 left-0 right-0 z-50 bg-white transition-shadow duration-500",
+          scrolled ? "shadow-sm" : "",
         )}
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between h-20">
-          <Link href="/" className="font-serif text-xl tracking-tight">
-            Felicitas Argerich
+          <Link href="/" className="flex items-center">
+            <img
+              src="/firma.jpg"
+              alt="Felicitas Argerich"
+              className="h-10 w-auto"
+            />
           </Link>
           <nav className="hidden md:flex items-center gap-10">
             {navLinks.map((item) => (
@@ -56,7 +60,7 @@ export function Header() {
 
       <div
         className={cn(
-          "fixed inset-0 bg-cream z-[60] md:hidden transition-transform duration-500",
+          "fixed inset-0 bg-white z-[60] md:hidden transition-transform duration-500",
           menuOpen ? "translate-x-0" : "translate-x-full",
         )}
       >

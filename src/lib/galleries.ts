@@ -44,7 +44,7 @@ export const galleries: Gallery[] = [
   },
 ]
 
-export const slideCount = 21
+export const slideCount = 9
 
 export function getGalleryImages(slug: string): string[] {
   const gallery = galleries.find((g) => g.slug === slug)
