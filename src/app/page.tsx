@@ -64,24 +64,22 @@ function HeroSlider() {
   }, [next])
 
   return (
-    <section className="relative w-full bg-charcoal" style={{ height: "85vh" }}>
-      <div className="absolute inset-0 flex items-center justify-center">
-        {slides.map((src, i) => (
-          <div
-            key={src}
-            className={cn(
-              "absolute inset-0 flex items-center justify-center transition-opacity duration-700 ease-in-out",
-              i === current ? "opacity-100" : "opacity-0 pointer-events-none",
-            )}
-          >
-            <img
-              src={src}
-              alt={`Obra ${i + 1}`}
-              className="max-w-full max-h-full object-contain"
-            />
-          </div>
-        ))}
-      </div>
+    <section className="relative w-full h-screen overflow-hidden">
+      {slides.map((src, i) => (
+        <div
+          key={src}
+          className={cn(
+            "absolute inset-0 transition-opacity duration-700 ease-in-out",
+            i === current ? "opacity-100" : "opacity-0 pointer-events-none",
+          )}
+        >
+          <img
+            src={src}
+            alt={`Obra ${i + 1}`}
+            className="w-full h-full object-cover"
+          />
+        </div>
+      ))}
 
       <button
         onClick={prev}
@@ -152,7 +150,7 @@ function GalleryCard({ gallery, index }: { gallery: typeof galleries[number]; in
       <div
         className={cn(
           "overflow-hidden mb-4 rounded-sm transition-all duration-500",
-          orientation === "portrait" ? "aspect-[3/4]" : "aspect-[16/9]",
+          orientation === "portrait" ? "aspect-[3/4]" : "aspect-[4/3]",
         )}
       >
         <img
