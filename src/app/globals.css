@@ -6,7 +6,9 @@
   --color-charcoal: #1A1A1A;
   --color-gray: #6B6B6B;
   --color-light-gray: #B0B0B0;
-  --color-accent: #2C2C2C;
+  --color-turquoise: #4ECDC4;
+  --color-turquoise-dark: #3AB5AD;
+  --color-turquoise-light: #A8E6E1;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-serif: "Playfair Display", Georgia, serif;
 }
@@ -21,6 +23,65 @@
   }
 
   ::selection {
-    @apply bg-charcoal/10 text-charcoal;
+    @apply bg-turquoise/20 text-charcoal;
+  }
+}
+
+@layer utilities {
+  .brush-stroke {
+    position: relative;
+  }
+
+  .brush-stroke::after {
+    content: "";
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      var(--color-turquoise) 15%,
+      var(--color-turquoise-dark) 50%,
+      var(--color-turquoise) 85%,
+      transparent 100%
+    );
+    opacity: 0.6;
+    border-radius: 2px;
+    animation: brush-draw 1.2s ease-out forwards;
+  }
+
+  @keyframes brush-draw {
+    from {
+      width: 0;
+      opacity: 0;
+    }
+    to {
+      width: 100%;
+      opacity: 0.6;
+    }
+  }
+
+  .masonry {
+    columns: 3;
+    column-gap: 1.5rem;
+  }
+
+  .masonry > * {
+    break-inside: avoid;
+    margin-bottom: 1.5rem;
+  }
+
+  @media (max-width: 1024px) {
+    .masonry {
+      columns: 2;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .masonry {
+      columns: 1;
+    }
   }
 }
