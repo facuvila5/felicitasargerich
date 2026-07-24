@@ -22,7 +22,7 @@ export const galleries: Gallery[] = [
     slug: "pintura-en-la-luz",
     title: "Pintura en la luz",
     cover: "/obras/portadas/pintura-en-la-luz.jpg",
-    imageCount: 28,
+    imageCount: 27,
   },
   {
     slug: "soltando-las-formas",

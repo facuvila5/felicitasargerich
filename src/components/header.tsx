@@ -31,11 +31,12 @@ export function Header() {
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between h-20">
           <Link href="/" className="flex items-center">
-            <img
-              src="/firma.jpg"
-              alt="Felicitas Argerich"
-              className="h-10 w-auto"
-            />
+            <span
+              className="text-2xl text-charcoal"
+              style={{ fontFamily: "'Kalam', cursive" }}
+            >
+              Felicitas Argerich
+            </span>
           </Link>
           <nav className="hidden md:flex items-center gap-10">
             {navLinks.map((item) => (
